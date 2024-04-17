@@ -9,22 +9,23 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("films")
+@RequestMapping("/api/films")
 public class filmcontroller {
 	@Autowired
 	private filmservice fs;
-	@GetMapping("/{id}")
+	@GetMapping
 	public Page<film> getallfilms(@RequestParam(defaultValue="0")int page,
 									@RequestParam(defaultValue="10")int size,
-									@RequestParam(defaultValue="asc")String direction){
-		Sort.Direction d=Sort.Direction.fromString(direction);
-	Pageable p=PageRequest.of(page, size,Sort.by(d,direction));
+									@RequestParam(defaultValue="id")String direction){
+		
+	Pageable p=PageRequest.of(page, size,Sort.by(direction));
 						return fs.getallfilms(p);
 							}
 	@PostMapping
@@ -35,7 +36,7 @@ public class filmcontroller {
 	public film getfilmbyid(@PathVariable Long id) {
 		return fs.getfilmbyid(id);
 	}
-	@DeleteMapping("/{id}")
+	@PutMapping("/{id}")
 	public film updatefilm(@PathVariable Long id,@RequestBody film f) {
 		return fs.updatefilm(id, f);
 	}

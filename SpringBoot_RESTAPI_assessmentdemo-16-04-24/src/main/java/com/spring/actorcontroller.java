@@ -1,8 +1,5 @@
 package com.spring;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,18 +15,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/actors")
+@RequestMapping("/api/actors")
 public class actorcontroller {
 	@Autowired
 	private actorservice as;
 	
-	@GetMapping("/{id}")
-	public Page<actors> getallactors(@RequestParam(defaultValue="0")int page,
-			@RequestParam(defaultValue="10")int size,
-			@RequestParam(defaultValue="asc")String direction){
-Sort.Direction d=Sort.Direction.fromString(direction);
-Pageable p=PageRequest.of(page, size,Sort.by(d,direction));
-return as.getallactors(p);
+	@GetMapping
+	public Page<actors> getallactors(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10")int size, @RequestParam(defaultValue = "id")String sortBy){
+		
+		Pageable pageable = PageRequest.of(page,size,Sort.by(sortBy));
+		return as.getallactors(pageable);	
 	}
 	@PostMapping
 	public actors addactor(@RequestBody actors ac) {
